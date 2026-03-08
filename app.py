@@ -338,7 +338,7 @@ class ConfigApp(ctk.CTk):
     def guardar_configuracion(self) -> bool:
         global TOKEN, HEADERS, DIAS_A_SUMAR_TAG, ENVIAR_INMEDIATO, LIMITE_TICKETS
 
-        TOKEN = self.entry_token.get().strip()
+        TOKEN = self.entry_token.get().strip().replace('"', '').replace("'", "")
 
         if not TOKEN:
             self.mostrar_error("Por favor ingresa un TOKEN")
@@ -450,7 +450,7 @@ class ConfigApp(ctk.CTk):
                 if connection_name == CONNECTION_WHATSAPP:
                     if ENVIAR_INMEDIATO:
                         enviar_nota_rapida(ticket_id, "NOT0", 0, None, nombre_contacto)
-                    enviar_nota_rapida(ticket_id, "NOT1", DIAS_A_SUMAR_TAG - 1, HORA_ENVIO_PROGRAMADO1, nombre_contacto)
+                    enviar_nota_rapida(ticket_id, "NOT1", DIAS_A_SUMAR_TAG, HORA_ENVIO_PROGRAMADO1, nombre_contacto)
                     enviar_nota_rapida(ticket_id, "NOT2", DIAS_A_SUMAR_TAG, HORA_ENVIO_PROGRAMADO2, nombre_contacto)
                     transferir_ticket(ticket_id, queue_id_destino, USER_ID_DESTINO)
 
@@ -461,7 +461,7 @@ class ConfigApp(ctk.CTk):
                     if ENVIAR_INMEDIATO:
                         enviar_plantilla_waba(ticket_id, "NOT0", [fecha_entrega_texto], 0, None)
                     enviar_plantilla_waba(ticket_id, "NOT1", None, DIAS_A_SUMAR_TAG, HORA_ENVIO_PROGRAMADO1)
-                    enviar_plantilla_waba(ticket_id, "NOT2", None, DIAS_A_SUMAR_TAG + 1, HORA_ENVIO_PROGRAMADO2)
+                    enviar_plantilla_waba(ticket_id, "NOT2", None, DIAS_A_SUMAR_TAG, HORA_ENVIO_PROGRAMADO2)
                     transferir_ticket(ticket_id, queue_id_destino, USER_ID_DESTINO)
 
             self.after(0, lambda: self.actualizar_progreso(1.0))
